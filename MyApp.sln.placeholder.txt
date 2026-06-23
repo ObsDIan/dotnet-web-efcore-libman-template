@@ -1,0 +1,8 @@
+這裡沒有直接產生 .sln，因為通常建議你用 dotnet CLI 建立：
+
+dotnet new sln -n MyApp
+dotnet sln add src/MyApp.Web/MyApp.Web.csproj
+dotnet sln add src/MyApp.Infrastructure/MyApp.Infrastructure.csproj
+dotnet sln add src/MyApp.Domain/MyApp.Domain.csproj
+
+這份 zip 主要提供可複製的程式碼範本。
