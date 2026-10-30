@@ -12,3 +12,8 @@ src/MyApp.Web/wwwroot/lib/
 
 # Logs
 *.log
+
+# Test output
+TestResults/
+coverage/
+*.trx

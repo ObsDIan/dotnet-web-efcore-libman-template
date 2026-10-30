@@ -1,4 +1,32 @@
-# ASP.NET Core + EF Core Class Library + LibMan 範本
+# ASP.NET Core + EF Core + LibMan Template
+
+[![CI](https://github.com/ObsDIan/dotnet-web-efcore-libman-template/actions/workflows/ci.yml/badge.svg)](https://github.com/ObsDIan/dotnet-web-efcore-libman-template/actions/workflows/ci.yml)
+
+可直接 clone、build、test 的 .NET 10 LTS 多專案範本，示範 ASP.NET Core MVC、EF Core、SQL Server、Fluent API、依賴注入與 LibMan。
+
+## 快速開始
+
+需求：
+
+- .NET 10 SDK
+- SQL Server LocalDB（執行 migration 或 Web 專案時需要）
+
+```bash
+git clone https://github.com/ObsDIan/dotnet-web-efcore-libman-template.git
+cd dotnet-web-efcore-libman-template
+dotnet tool restore
+cd src/MyApp.Web
+dotnet libman restore
+cd ../..
+dotnet restore MyApp.sln
+dotnet build MyApp.sln --no-restore
+dotnet test MyApp.sln --no-build
+dotnet run --project src/MyApp.Web
+```
+
+> `appsettings.json` 使用 Windows LocalDB。若使用其他環境，請調整 `ConnectionStrings:DefaultConnection`。
+
+## 專案結構
 
 這份範本示範一個常見的 .NET 專案拆法：
 
@@ -9,7 +37,7 @@ src/
   MyApp.Domain/          # 類別庫，負責 Entity / Domain Model
 ```
 
-## 重點分工
+## 分層職責
 
 ### MyApp.Web
 
@@ -44,7 +72,7 @@ src/
 
 ---
 
-# 建立 solution
+## 從零建立 solution
 
 ```bash
 dotnet new sln -n MyApp
@@ -58,14 +86,14 @@ dotnet sln add src/MyApp.Infrastructure/MyApp.Infrastructure.csproj
 dotnet sln add src/MyApp.Domain/MyApp.Domain.csproj
 ```
 
-# 專案參考
+## 專案參考
 
 ```bash
 dotnet add src/MyApp.Web/MyApp.Web.csproj reference src/MyApp.Infrastructure/MyApp.Infrastructure.csproj
 dotnet add src/MyApp.Infrastructure/MyApp.Infrastructure.csproj reference src/MyApp.Domain/MyApp.Domain.csproj
 ```
 
-# 套件安裝
+## 套件安裝
 
 Infrastructure：
 
@@ -81,7 +109,7 @@ Web：
 dotnet add src/MyApp.Web/MyApp.Web.csproj package Microsoft.EntityFrameworkCore.Design
 ```
 
-# EF Core Migration
+## EF Core Migration
 
 因為 DbContext 在 `MyApp.Infrastructure`，但啟動專案是 `MyApp.Web`，所以指令要指定兩個專案：
 
@@ -119,7 +147,7 @@ Update-Database `
 
 ---
 
-# LibMan
+## LibMan
 
 LibMan 建議放在 Web 專案，因為一般 Class Library 不會執行，也通常不會有 `wwwroot`。
 
@@ -155,7 +183,8 @@ dotnet tool install Microsoft.Web.LibraryManager.Cli
 
 ```bash
 dotnet tool restore
-dotnet libman restore --manifest src/MyApp.Web/libman.json
+cd src/MyApp.Web
+dotnet libman restore
 ```
 
 也可以進入 Web 專案執行：
@@ -167,7 +196,7 @@ dotnet libman restore
 
 ---
 
-# 本範本的慣例
+## 設計原則
 
 官方支援：
 
@@ -188,3 +217,11 @@ dotnet libman restore
 - Web 專案呼叫 Infrastructure 提供的 `AddInfrastructure`
 - LibMan 放 Web，不放一般 Class Library
 - `wwwroot/lib` 不提交 Git，透過 LibMan 還原
+
+## 自動化驗證
+
+GitHub Actions 會在 push 與 pull request 時執行工具還原、LibMan 還原、套件還原、Release build 與測試。
+
+## 使用方式
+
+這是教學與專案起始範本。建立新專案時，請重新命名 `MyApp`、調整 connection string，並依需求加入 authentication、logging、health checks 與部署設定。
