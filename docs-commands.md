@@ -3,7 +3,7 @@
 ## 還原 .NET 套件
 
 ```bash
-dotnet restore
+dotnet restore MyApp.sln
 ```
 
 ## 還原 local tools
@@ -15,7 +15,9 @@ dotnet tool restore
 ## 還原 LibMan
 
 ```bash
-dotnet libman restore --manifest src/MyApp.Web/libman.json
+cd src/MyApp.Web
+dotnet libman restore
+cd ../..
 ```
 
 ## 建立 migration
@@ -40,4 +42,11 @@ dotnet ef database update \
 
 ```bash
 dotnet run --project src/MyApp.Web
+```
+
+## 建置與測試
+
+```bash
+dotnet build MyApp.sln --configuration Release --no-restore
+dotnet test MyApp.sln --configuration Release --no-build
 ```
